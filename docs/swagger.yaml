@@ -1,0 +1,39 @@
+definitions:
+  model.BadRequestResponse:
+    type: object
+  model.CreateRecordRequest:
+    properties:
+      msg_type:
+        type: string
+      user:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /couriers/:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: Records
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.CreateRecordRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.CreateRecordRequest'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.BadRequestResponse'
+      summary: Создание новых записей
+      tags:
+      - records-controller
+swagger: "2.0"
