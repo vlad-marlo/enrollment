@@ -8,13 +8,24 @@ definitions:
       user:
         type: string
     type: object
+  model.CreateRecordResponse:
+    properties:
+      id:
+        type: integer
+      msg_type:
+        type: string
+      user:
+        type: string
+    type: object
 info:
   contact: {}
 paths:
-  /couriers/:
-    get:
+  /api/records/:
+    post:
       consumes:
       - application/json
+      - text/xml
+      - application/x-www-form-urlencoded
       parameters:
       - description: Records
         in: body
@@ -24,11 +35,13 @@ paths:
           $ref: '#/definitions/model.CreateRecordRequest'
       produces:
       - application/json
+      - text/xml
+      - application/x-www-form-urlencoded
       responses:
         "201":
-          description: OK
+          description: Created
           schema:
-            $ref: '#/definitions/model.CreateRecordRequest'
+            $ref: '#/definitions/model.CreateRecordResponse'
         "400":
           description: Bad Request
           schema:

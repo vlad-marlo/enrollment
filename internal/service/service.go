@@ -1,14 +1,21 @@
 package service
 
 import (
+	"context"
 	"errors"
 	"fmt"
+	"github.com/vlad-marlo/enrollment/internal/model"
 	"github.com/vlad-marlo/enrollment/internal/pkg/logger"
 	"go.uber.org/zap"
 )
 
+type Repository interface {
+	CreateRecord(ctx context.Context, record *model.Record) error
+}
+
 type Service struct {
-	logger *zap.Logger
+	logger     *zap.Logger
+	repository Repository
 }
 
 var ErrNilReference = errors.New("nil reference")

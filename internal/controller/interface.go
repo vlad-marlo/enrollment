@@ -1,6 +1,9 @@
 package controller
 
-import "context"
+import (
+	"context"
+	"github.com/vlad-marlo/enrollment/internal/model"
+)
 
 type Interface interface {
 	Start(ctx context.Context) error
@@ -8,6 +11,7 @@ type Interface interface {
 }
 
 type Service interface {
+	CreateRecord(ctx context.Context, req *model.CreateRecordRequest) (*model.CreateRecordResponse, error)
 }
 
 type Config interface {

@@ -5,7 +5,10 @@ import (
 	"github.com/vlad-marlo/enrollment/internal/controller"
 	"github.com/vlad-marlo/enrollment/internal/controller/http"
 	"github.com/vlad-marlo/enrollment/internal/pkg/logger"
+	pg "github.com/vlad-marlo/enrollment/internal/pkg/pgx"
+	"github.com/vlad-marlo/enrollment/internal/pkg/pgx/client"
 	"github.com/vlad-marlo/enrollment/internal/service"
+	"github.com/vlad-marlo/enrollment/internal/store/pgx"
 	"go.uber.org/fx"
 )
 
@@ -23,6 +26,8 @@ func NewApp() fx.Option {
 			AsServer(http.New),
 			fx.Annotate(config.NewControllerConfig, fx.As(new(controller.Config))),
 			fx.Annotate(service.New, fx.As(new(controller.Service))),
+			fx.Annotate(client.New, fx.As(new(pg.Client))),
+			fx.Annotate(pgx.New, fx.As(new(service.Repository))),
 		),
 		fx.Invoke(
 			fx.Annotate(RunServers, fx.ParamTags(serversGroup)),

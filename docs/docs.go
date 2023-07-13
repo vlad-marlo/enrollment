@@ -16,13 +16,17 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/couriers/": {
-            "get": {
+        "/api/records/": {
+            "post": {
                 "consumes": [
-                    "application/json"
+                    "application/json",
+                    "text/xml",
+                    "application/x-www-form-urlencoded"
                 ],
                 "produces": [
-                    "application/json"
+                    "application/json",
+                    "text/xml",
+                    "application/x-www-form-urlencoded"
                 ],
                 "tags": [
                     "records-controller"
@@ -41,9 +45,9 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "201": {
-                        "description": "OK",
+                        "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/model.CreateRecordRequest"
+                            "$ref": "#/definitions/model.CreateRecordResponse"
                         }
                     },
                     "400": {
@@ -63,6 +67,20 @@ const docTemplate = `{
         "model.CreateRecordRequest": {
             "type": "object",
             "properties": {
+                "msg_type": {
+                    "type": "string"
+                },
+                "user": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.CreateRecordResponse": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
                 "msg_type": {
                     "type": "string"
                 },

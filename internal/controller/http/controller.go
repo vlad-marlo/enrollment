@@ -62,6 +62,7 @@ func (srv *Controller) Stop(context.Context) error {
 // configureRoutes sets all needed
 func (srv *Controller) configureRoutes() {
 	srv.engine.Get("/swagger/*", swagger.HandlerDefault)
+	srv.engine.Post("/api/records/", srv.HandleCreateRecord)
 }
 
 // configureMW configures all middlewares to engine.
