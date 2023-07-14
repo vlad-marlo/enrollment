@@ -57,7 +57,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/records/{courier_id}": {
+        "/api/records/{record_id}": {
             "get": {
                 "consumes": [
                     "application/json"
@@ -72,15 +72,15 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "Courier identifier",
-                        "name": "courier_id",
+                        "description": "record identifier",
+                        "name": "record_id",
                         "in": "path",
                         "required": true
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "Created",
+                        "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/model.GetRecordResponse"
                         }
@@ -89,6 +89,43 @@ const docTemplate = `{
                         "description": "Bad Request",
                         "schema": {
                             "$ref": "#/definitions/model.BadRequestResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/users/records/{user_id}": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "records-controller"
+                ],
+                "summary": "Получение записей пользователя",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "user identifier",
+                        "name": "user_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.GetUserRecordsResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/model.GetRecordResponse"
                         }
                     }
                 }
@@ -143,17 +180,48 @@ const docTemplate = `{
                     "type": "string"
                 }
             }
+        },
+        "model.GetUserRecordsResponse": {
+            "type": "object",
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.UsersRecord"
+                    }
+                },
+                "records_stored": {
+                    "type": "integer"
+                },
+                "user": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.UsersRecord": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "msg_type": {
+                    "type": "string"
+                }
+            }
         }
     }
 }`
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
-	Version:          "",
+	Version:          "1.0",
 	Host:             "",
 	BasePath:         "",
 	Schemes:          []string{},
-	Title:            "",
+	Title:            "Enrollment service",
 	Description:      "",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,

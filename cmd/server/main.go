@@ -14,6 +14,9 @@ import (
 
 const serversGroup = `group:"servers"`
 
+//	@title		Enrollment service
+//	@version	1.0
+
 func main() {
 	fx.New(NewApp()).Run()
 }

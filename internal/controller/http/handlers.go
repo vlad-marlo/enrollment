@@ -39,7 +39,7 @@ func (srv *Controller) HandleCreateRecord(ctx *fiber.Ctx) error {
 //	@Accept		json
 //	@Produce	json
 //	@Param		record_id	path		int							true	"record identifier"
-//	@Success	200			{object}	model.GetRecordResponse		"Created"
+//	@Success	200			{object}	model.GetRecordResponse		"OK"
 //	@Failure	400			{object}	model.BadRequestResponse	"Bad Request"
 //	@Router		/api/records/{record_id} [get]
 func (srv *Controller) HandleGetRecord(ctx *fiber.Ctx) error {
@@ -53,11 +53,14 @@ func (srv *Controller) HandleGetRecord(ctx *fiber.Ctx) error {
 
 // HandleGetUserRecords returns records of user.
 //
-// @Tags records-controller
-// @Summary Получение запмсей пользователя
-// @Accept json
-// @Produce json
-// @Param
+//	@Tags		records-controller
+//	@Summary	Получение записей пользователя
+//	@Accept		json
+//	@Produce	json
+//	@Param		user_id	path		string							true	"user identifier"
+//	@Success	200		{object}	model.GetUserRecordsResponse	"OK
+//	@Failure	400		{object}	model.GetRecordResponse			"Bad Request"
+//	@Router		/api/users/records/{user_id} [get]
 func (srv *Controller) HandleGetUserRecords(ctx *fiber.Ctx) error {
 	user := ctx.Params("user")
 	resp, err := srv.srv.GetUser(ctx.UserContext(), user)

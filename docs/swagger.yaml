@@ -30,8 +30,30 @@ definitions:
       user:
         type: string
     type: object
+  model.GetUserRecordsResponse:
+    properties:
+      records:
+        items:
+          $ref: '#/definitions/model.UsersRecord'
+        type: array
+      records_stored:
+        type: integer
+      user:
+        type: string
+    type: object
+  model.UsersRecord:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: integer
+      msg_type:
+        type: string
+    type: object
 info:
   contact: {}
+  title: Enrollment service
+  version: "1.0"
 paths:
   /api/records/:
     post:
@@ -60,21 +82,21 @@ paths:
       summary: Создание новых записей
       tags:
       - records-controller
-  /api/records/{courier_id}:
+  /api/records/{record_id}:
     get:
       consumes:
       - application/json
       parameters:
-      - description: Courier identifier
+      - description: record identifier
         in: path
-        name: courier_id
+        name: record_id
         required: true
         type: integer
       produces:
       - application/json
       responses:
         "200":
-          description: Created
+          description: OK
           schema:
             $ref: '#/definitions/model.GetRecordResponse'
         "400":
@@ -82,6 +104,30 @@ paths:
           schema:
             $ref: '#/definitions/model.BadRequestResponse'
       summary: Получение записи
+      tags:
+      - records-controller
+  /api/users/records/{user_id}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: user identifier
+        in: path
+        name: user_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.GetUserRecordsResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.GetRecordResponse'
+      summary: Получение записей пользователя
       tags:
       - records-controller
 swagger: "2.0"
