@@ -13,8 +13,9 @@ var cfgFile string
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "enrollment-cli",
-	Short: "сервис хранения записей",
-	Long:  `Сервис хранит записи, получает их для каждого пользователя.`,
+	Short: "консольный интерфейс работы с сервисом хранения записей",
+	Long: `С помощью данной утилиты вы можете загружать свои записи на сервер, получать их
+по идентификаторам, по пользователю, а так-же все загруженные в систему записи.`,
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
