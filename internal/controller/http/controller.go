@@ -69,6 +69,7 @@ func (srv *Controller) configureRoutes() {
 	srv.engine.Post("/api/records", srv.HandleCreateRecord)
 	srv.engine.Get("/api/records/:id", srv.HandleGetRecord)
 	srv.engine.Get("/api/user/:user/records", srv.HandleGetUserRecords)
+	srv.engine.Get("/ping", srv.HandlePing)
 	srv.engine.Get("/api/records", srv.HandleGetAllRecords)
 }
 

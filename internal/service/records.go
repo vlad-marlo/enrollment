@@ -38,7 +38,7 @@ func (srv *Service) GetRecord(ctx context.Context, rawID string) (*model.GetReco
 
 	record, err = srv.repository.GetRecord(ctx, id)
 	if err != nil {
-		return nil, ErrBadRequest.With(zap.Error(err))
+		return nil, ErrNotFound.With(zap.Error(err))
 	}
 
 	resp := &model.GetRecordResponse{
@@ -80,6 +80,7 @@ func (srv *Service) GetRecords(ctx context.Context) (resp *model.GetAllRecordsRe
 func (srv *Service) GetUser(ctx context.Context, user string) (resp *model.GetUserRecordsResponse, err error) {
 	resp = new(model.GetUserRecordsResponse)
 	resp.User = user
+	resp.Records = []model.UsersRecord{}
 
 	if resp.Records, err = srv.repository.GetUserRecords(ctx, user); err != nil {
 		if errors.Is(err, store.ErrNotFound) {

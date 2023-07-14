@@ -3,6 +3,7 @@
 .PHONY: build
 build:
 	go build --o server.out cmd/server/main.go
+	go build --o enrollment-cli cmd/client/main.go
 
 .PHONY: run
 run: build

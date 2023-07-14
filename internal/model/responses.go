@@ -27,5 +27,5 @@ type GetAllRecordsResponse struct {
 type GetUserRecordsResponse struct {
 	Count   int64         `json:"records_stored"`
 	User    string        `json:"user"`
-	Records []UsersRecord `json:"records"`
+	Records []UsersRecord `json:"records,omitempty"`
 }

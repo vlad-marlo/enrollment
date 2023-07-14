@@ -86,3 +86,7 @@ func (srv *Controller) HandleGetAllRecords(ctx *fiber.Ctx) error {
 	}
 	return ctx.JSON(resp)
 }
+
+func (srv *Controller) HandlePing(ctx *fiber.Ctx) error {
+	return ctx.SendString("pong")
+}
