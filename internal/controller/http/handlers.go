@@ -4,6 +4,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/vlad-marlo/enrollment/internal/model"
 	"go.uber.org/zap"
+	"net/http"
 )
 
 // HandleCreateRecord creates new record into service.
@@ -11,7 +12,7 @@ import (
 //	@Tags		records-controller
 //	@Summary	Создание новых записей
 //	@Accept		json,xml,x-www-form-urlencoded
-//	@Produce	json,xml,x-www-form-urlencoded
+//	@Produce	json
 //	@Param		request	body		model.CreateRecordRequest	true	"Records"
 //	@Success	201		{object}	model.CreateRecordResponse	"Created"
 //	@Failure	400		{object}	model.BadRequestResponse	"Bad Request"
@@ -23,5 +24,53 @@ func (srv *Controller) HandleCreateRecord(ctx *fiber.Ctx) error {
 		return srv.handleError(ctx, err)
 	}
 	srv.log.Debug("handled request", zap.String("user", req.User), zap.String("msg_type", req.MsgType))
-	return ctx.Format(req)
+	resp, err := srv.srv.CreateRecord(ctx.UserContext(), req)
+	if err != nil {
+		return srv.handleError(ctx, err)
+	}
+	ctx.Status(http.StatusCreated)
+	return ctx.JSON(resp)
+}
+
+// HandleGetRecord returns record by id.
+//
+//	@Tags		records-controller
+//	@Summary	Получение записи
+//	@Accept		json
+//	@Produce	json
+//	@Param		record_id	path		int							true	"record identifier"
+//	@Success	200			{object}	model.GetRecordResponse		"Created"
+//	@Failure	400			{object}	model.BadRequestResponse	"Bad Request"
+//	@Router		/api/records/{record_id} [get]
+func (srv *Controller) HandleGetRecord(ctx *fiber.Ctx) error {
+	id := ctx.Params("id")
+	resp, err := srv.srv.GetRecord(ctx.UserContext(), id)
+	if err != nil {
+		return srv.handleError(ctx, err)
+	}
+	return ctx.JSON(resp)
+}
+
+// HandleGetUserRecords returns records of user.
+//
+// @Tags records-controller
+// @Summary Получение запмсей пользователя
+// @Accept json
+// @Produce json
+// @Param
+func (srv *Controller) HandleGetUserRecords(ctx *fiber.Ctx) error {
+	user := ctx.Params("user")
+	resp, err := srv.srv.GetUser(ctx.UserContext(), user)
+	if err != nil {
+		return srv.handleError(ctx, err)
+	}
+	return ctx.JSON(resp)
+}
+
+func (srv *Controller) HandleGetAllRecords(ctx *fiber.Ctx) error {
+	resp, err := srv.srv.GetRecords(ctx.UserContext())
+	if err != nil {
+		return srv.handleError(ctx, err)
+	}
+	return ctx.JSON(resp)
 }

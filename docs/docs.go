@@ -24,9 +24,7 @@ const docTemplate = `{
                     "application/x-www-form-urlencoded"
                 ],
                 "produces": [
-                    "application/json",
-                    "text/xml",
-                    "application/x-www-form-urlencoded"
+                    "application/json"
                 ],
                 "tags": [
                     "records-controller"
@@ -58,6 +56,43 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/api/records/{courier_id}": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "records-controller"
+                ],
+                "summary": "Получение записи",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Courier identifier",
+                        "name": "courier_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/model.GetRecordResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/model.BadRequestResponse"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -78,6 +113,26 @@ const docTemplate = `{
         "model.CreateRecordResponse": {
             "type": "object",
             "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "msg_type": {
+                    "type": "string"
+                },
+                "user": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.GetRecordResponse": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
                 "id": {
                     "type": "integer"
                 },

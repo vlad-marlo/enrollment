@@ -8,3 +8,9 @@ type Record struct {
 	MsgType   string
 	CreatedAt time.Time
 }
+
+type UsersRecord struct {
+	ID        int64     `json:"id"`
+	MsgType   string    `json:"msg_type"`
+	CreatedAt time.Time `json:"created_at"`
+}

@@ -10,6 +10,19 @@ definitions:
     type: object
   model.CreateRecordResponse:
     properties:
+      created_at:
+        type: string
+      id:
+        type: integer
+      msg_type:
+        type: string
+      user:
+        type: string
+    type: object
+  model.GetRecordResponse:
+    properties:
+      created_at:
+        type: string
       id:
         type: integer
       msg_type:
@@ -35,8 +48,6 @@ paths:
           $ref: '#/definitions/model.CreateRecordRequest'
       produces:
       - application/json
-      - text/xml
-      - application/x-www-form-urlencoded
       responses:
         "201":
           description: Created
@@ -47,6 +58,30 @@ paths:
           schema:
             $ref: '#/definitions/model.BadRequestResponse'
       summary: Создание новых записей
+      tags:
+      - records-controller
+  /api/records/{courier_id}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: Courier identifier
+        in: path
+        name: courier_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Created
+          schema:
+            $ref: '#/definitions/model.GetRecordResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.BadRequestResponse'
+      summary: Получение записи
       tags:
       - records-controller
 swagger: "2.0"

@@ -12,6 +12,9 @@ type Interface interface {
 
 type Service interface {
 	CreateRecord(ctx context.Context, req *model.CreateRecordRequest) (*model.CreateRecordResponse, error)
+	GetRecord(ctx context.Context, id string) (*model.GetRecordResponse, error)
+	GetRecords(ctx context.Context) (*model.GetAllRecordsResponse, error)
+	GetUser(ctx context.Context, user string) (*model.GetUserRecordsResponse, error)
 }
 
 type Config interface {
