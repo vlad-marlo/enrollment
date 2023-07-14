@@ -7,6 +7,7 @@
 *.dll
 *.so
 *.dylib
+enrollment-cli
 .idea
 
 # Test binary, built with `go test -c`
