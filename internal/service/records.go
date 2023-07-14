@@ -65,6 +65,7 @@ func (srv *Service) GetRecords(ctx context.Context) (resp *model.GetAllRecordsRe
 	}
 
 	resp.UsersRegistered = int64(len(users))
+	resp.Records = make(map[string][]model.UsersRecord)
 
 	for _, user := range users {
 		resp.Records[user], err = srv.repository.GetUserRecords(ctx, user)

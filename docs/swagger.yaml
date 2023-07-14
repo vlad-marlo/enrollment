@@ -19,6 +19,19 @@ definitions:
       user:
         type: string
     type: object
+  model.GetAllRecordsResponse:
+    properties:
+      records_stored:
+        type: integer
+      users:
+        additionalProperties:
+          items:
+            $ref: '#/definitions/model.UsersRecord'
+          type: array
+        type: object
+      users_registered:
+        type: integer
+    type: object
   model.GetRecordResponse:
     properties:
       created_at:
@@ -56,6 +69,23 @@ info:
   version: "1.0"
 paths:
   /api/records/:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.GetAllRecordsResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.BadRequestResponse'
+      summary: Получение записей пользователя
+      tags:
+      - records-controller
     post:
       consumes:
       - application/json
@@ -106,7 +136,7 @@ paths:
       summary: Получение записи
       tags:
       - records-controller
-  /api/users/records/{user_id}:
+  /api/user/{user_id}/records:
     get:
       consumes:
       - application/json
@@ -126,7 +156,7 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/model.GetRecordResponse'
+            $ref: '#/definitions/model.BadRequestResponse'
       summary: Получение записей пользователя
       tags:
       - records-controller

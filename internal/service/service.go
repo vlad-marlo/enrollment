@@ -28,11 +28,12 @@ type Service struct {
 var ErrNilReference = errors.New("nil reference")
 
 // New initialize service with logger and storage.
-func New(log *zap.Logger) (*Service, error) {
+func New(log *zap.Logger, repo Repository) (*Service, error) {
 	if log == nil {
 		return nil, fmt.Errorf("%w: logger", ErrNilReference)
 	}
 	srv := new(Service)
+	srv.repository = repo
 	srv.logger = log.With(zap.String(logger.EntityField, "service"))
 	return srv, nil
 }

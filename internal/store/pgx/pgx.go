@@ -4,12 +4,15 @@ import (
 	"errors"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/vlad-marlo/enrollment/internal/pkg/pgx"
+	"github.com/vlad-marlo/enrollment/internal/service"
 	"go.uber.org/zap"
 )
 
 var (
 	ErrNilReference = errors.New("unexpectedly got nil reference in storage")
 )
+
+var _ service.Repository = (*Store)(nil)
 
 // Store is postgres storage.
 type Store struct {

@@ -1,12 +1,16 @@
 package http
 
 import (
+	"errors"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/swagger"
 	_ "github.com/vlad-marlo/enrollment/docs"
 	"github.com/vlad-marlo/enrollment/internal/controller"
+	"github.com/vlad-marlo/enrollment/internal/model"
+	"github.com/vlad-marlo/enrollment/internal/pkg/fielderr"
 	"github.com/vlad-marlo/enrollment/internal/pkg/logger"
 	"go.uber.org/zap"
+	"net/http"
 )
 
 import (
@@ -63,12 +67,24 @@ func (srv *Controller) Stop(context.Context) error {
 func (srv *Controller) configureRoutes() {
 	srv.engine.Get("/swagger/*", swagger.HandlerDefault)
 	srv.engine.Post("/api/records/", srv.HandleCreateRecord)
+	srv.engine.Get("/api/records/:id", srv.HandleGetRecord)
+	srv.engine.Get("/api/user/:user/records", srv.HandleGetUserRecords)
+	srv.engine.Get("/api/records/", srv.HandleGetAllRecords)
 }
 
 // configureMW configures all middlewares to engine.
 func (srv *Controller) configureMW() {
 }
 
-func (srv *Controller) handleError(ctx *fiber.Ctx, err error) error {
-	return err
+func (srv *Controller) handleError(c *fiber.Ctx, msg string, err error, fields ...zap.Field) error {
+	var fieldErr *fielderr.Error
+	if errors.As(err, &fieldErr) {
+		srv.log.Warn(msg, append(fieldErr.Fields(), fields...)...)
+		c.Status(fieldErr.CodeHTTP())
+		return c.JSON(fieldErr.Data())
+	}
+
+	srv.log.Warn(msg, append(fields, zap.NamedError("checked_error", err))...)
+	c.Status(http.StatusBadRequest)
+	return c.JSON(model.BadRequestResponse{})
 }

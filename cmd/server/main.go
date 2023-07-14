@@ -7,9 +7,11 @@ import (
 	"github.com/vlad-marlo/enrollment/internal/pkg/logger"
 	pg "github.com/vlad-marlo/enrollment/internal/pkg/pgx"
 	"github.com/vlad-marlo/enrollment/internal/pkg/pgx/client"
+	"github.com/vlad-marlo/enrollment/internal/pkg/pgx/migrator"
 	"github.com/vlad-marlo/enrollment/internal/service"
 	"github.com/vlad-marlo/enrollment/internal/store/pgx"
 	"go.uber.org/fx"
+	"go.uber.org/zap"
 )
 
 const serversGroup = `group:"servers"`
@@ -28,14 +30,23 @@ func NewApp() fx.Option {
 			logger.New,
 			AsServer(http.New),
 			fx.Annotate(config.NewControllerConfig, fx.As(new(controller.Config))),
+			fx.Annotate(config.NewPgConfig, fx.As(new(client.Config))),
 			fx.Annotate(service.New, fx.As(new(controller.Service))),
 			fx.Annotate(client.New, fx.As(new(pg.Client))),
 			fx.Annotate(pgx.New, fx.As(new(service.Repository))),
 		),
 		fx.Invoke(
+			Migrate,
 			fx.Annotate(RunServers, fx.ParamTags(serversGroup)),
 		),
+		fx.NopLogger,
 	)
+}
+
+func Migrate(cli pg.Client) error {
+	migrations, err := migrator.MigrateUp(cli)
+	cli.L().Info("migrated database", zap.Int("migrations_applied", migrations))
+	return err
 }
 
 // AsServer annotates the given constructor to state that
@@ -48,6 +59,7 @@ func AsServer(f any) any {
 	)
 }
 
+// RunServers adds hooks to run all existing servers.
 func RunServers(servers []controller.Interface, lc fx.Lifecycle) {
 	for _, srv := range servers {
 		lc.Append(fx.Hook{

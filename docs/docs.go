@@ -17,6 +17,32 @@ const docTemplate = `{
     "basePath": "{{.BasePath}}",
     "paths": {
         "/api/records/": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "records-controller"
+                ],
+                "summary": "Получение записей пользователя",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.GetAllRecordsResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/model.BadRequestResponse"
+                        }
+                    }
+                }
+            },
             "post": {
                 "consumes": [
                     "application/json",
@@ -94,7 +120,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/users/records/{user_id}": {
+        "/api/user/{user_id}/records": {
             "get": {
                 "consumes": [
                     "application/json"
@@ -125,7 +151,7 @@ const docTemplate = `{
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/model.GetRecordResponse"
+                            "$ref": "#/definitions/model.BadRequestResponse"
                         }
                     }
                 }
@@ -161,6 +187,26 @@ const docTemplate = `{
                 },
                 "user": {
                     "type": "string"
+                }
+            }
+        },
+        "model.GetAllRecordsResponse": {
+            "type": "object",
+            "properties": {
+                "records_stored": {
+                    "type": "integer"
+                },
+                "users": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/definitions/model.UsersRecord"
+                        }
+                    }
+                },
+                "users_registered": {
+                    "type": "integer"
                 }
             }
         },
