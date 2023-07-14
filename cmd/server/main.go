@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"github.com/vlad-marlo/enrollment/internal/config"
 	"github.com/vlad-marlo/enrollment/internal/controller"
 	"github.com/vlad-marlo/enrollment/internal/controller/http"
@@ -16,10 +17,14 @@ import (
 
 const serversGroup = `group:"servers"`
 
+var migrate bool
+
 //	@title		Enrollment service
 //	@version	1.0
 
 func main() {
+	flag.BoolVar(&migrate, "migrate", false, "if set true then migrations will be applied to database")
+	flag.Parse()
 	fx.New(NewApp()).Run()
 }
 
@@ -44,6 +49,9 @@ func NewApp() fx.Option {
 }
 
 func Migrate(cli pg.Client) error {
+	if !migrate {
+		return nil
+	}
 	migrations, err := migrator.MigrateUp(cli)
 	cli.L().Info("migrated database", zap.Int("migrations_applied", migrations))
 	return err

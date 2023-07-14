@@ -4,6 +4,13 @@
 build:
 	go build --o server.out cmd/server/main.go
 
+.PHONY: run
+run: build
+	./server.out
+
+.PHONY: runm
+runm: build
+	./server.out -migrate=true
 
 .PHONY: gen
 gen:
