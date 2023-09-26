@@ -1,0 +1,252 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "Enrollment service",
+        "contact": {},
+        "version": "1.0"
+    },
+    "paths": {
+        "/api/records/": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "records-controller"
+                ],
+                "summary": "Получение записей пользователя",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.GetAllRecordsResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/model.BadRequestResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "consumes": [
+                    "application/json",
+                    "text/xml",
+                    "application/x-www-form-urlencoded"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "records-controller"
+                ],
+                "summary": "Создание новых записей",
+                "parameters": [
+                    {
+                        "description": "Records",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.CreateRecordRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/model.CreateRecordResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/model.BadRequestResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/records/{record_id}": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "records-controller"
+                ],
+                "summary": "Получение записи",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "record identifier",
+                        "name": "record_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.GetRecordResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/model.BadRequestResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/user/{user_id}/records": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "records-controller"
+                ],
+                "summary": "Получение записей пользователя",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "user identifier",
+                        "name": "user_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.GetUserRecordsResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/model.BadRequestResponse"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "model.BadRequestResponse": {
+            "type": "object"
+        },
+        "model.CreateRecordRequest": {
+            "type": "object",
+            "properties": {
+                "msg_type": {
+                    "type": "string"
+                },
+                "user": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.CreateRecordResponse": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "msg_type": {
+                    "type": "string"
+                },
+                "user": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.GetAllRecordsResponse": {
+            "type": "object",
+            "properties": {
+                "records_stored": {
+                    "type": "integer"
+                },
+                "users": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/definitions/model.UsersRecord"
+                        }
+                    }
+                },
+                "users_registered": {
+                    "type": "integer"
+                }
+            }
+        },
+        "model.GetRecordResponse": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "msg_type": {
+                    "type": "string"
+                },
+                "user": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.GetUserRecordsResponse": {
+            "type": "object",
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.UsersRecord"
+                    }
+                },
+                "records_stored": {
+                    "type": "integer"
+                },
+                "user": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.UsersRecord": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "msg_type": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

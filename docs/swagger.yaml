@@ -1,0 +1,163 @@
+definitions:
+  model.BadRequestResponse:
+    type: object
+  model.CreateRecordRequest:
+    properties:
+      msg_type:
+        type: string
+      user:
+        type: string
+    type: object
+  model.CreateRecordResponse:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: integer
+      msg_type:
+        type: string
+      user:
+        type: string
+    type: object
+  model.GetAllRecordsResponse:
+    properties:
+      records_stored:
+        type: integer
+      users:
+        additionalProperties:
+          items:
+            $ref: '#/definitions/model.UsersRecord'
+          type: array
+        type: object
+      users_registered:
+        type: integer
+    type: object
+  model.GetRecordResponse:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: integer
+      msg_type:
+        type: string
+      user:
+        type: string
+    type: object
+  model.GetUserRecordsResponse:
+    properties:
+      records:
+        items:
+          $ref: '#/definitions/model.UsersRecord'
+        type: array
+      records_stored:
+        type: integer
+      user:
+        type: string
+    type: object
+  model.UsersRecord:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: integer
+      msg_type:
+        type: string
+    type: object
+info:
+  contact: {}
+  title: Enrollment service
+  version: "1.0"
+paths:
+  /api/records/:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.GetAllRecordsResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.BadRequestResponse'
+      summary: Получение записей пользователя
+      tags:
+      - records-controller
+    post:
+      consumes:
+      - application/json
+      - text/xml
+      - application/x-www-form-urlencoded
+      parameters:
+      - description: Records
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.CreateRecordRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/model.CreateRecordResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.BadRequestResponse'
+      summary: Создание новых записей
+      tags:
+      - records-controller
+  /api/records/{record_id}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: record identifier
+        in: path
+        name: record_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.GetRecordResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.BadRequestResponse'
+      summary: Получение записи
+      tags:
+      - records-controller
+  /api/user/{user_id}/records:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: user identifier
+        in: path
+        name: user_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.GetUserRecordsResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.BadRequestResponse'
+      summary: Получение записей пользователя
+      tags:
+      - records-controller
+swagger: "2.0"
